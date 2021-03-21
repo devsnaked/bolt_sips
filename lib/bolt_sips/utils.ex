@@ -3,8 +3,6 @@ defmodule Bolt.Sips.Utils do
   # Common utilities
 
   @default_driver_options [
-    hostname: "",
-    port: nil,
     pool_size: 15,
     max_overflow: 0,
     timeout: 15_000,
