@@ -2,12 +2,9 @@ defmodule Bolt.Sips.Utils do
   @moduledoc false
   # Common utilities
 
-  @default_hostname "localhost"
-  @default_bolt_port 7687
-
   @default_driver_options [
-    hostname: @default_hostname,
-    port: @default_bolt_port,
+    hostname: "",
+    port: nil,
     pool_size: 15,
     max_overflow: 0,
     timeout: 15_000,
@@ -35,10 +32,12 @@ defmodule Bolt.Sips.Utils do
       |> Keyword.merge(opts)
 
     ssl_or_sock = if(Keyword.get(config, :ssl), do: :ssl, else: Keyword.get(config, :socket))
+    config_env = Application.get_env(:bolt_sips, Bolt, [])
+
 
     config
-    |> Keyword.put_new(:hostname, System.get_env("NEO4J_HOST") || @default_hostname)
-    |> Keyword.put_new(:port, System.get_env("NEO4J_PORT") || @default_bolt_port)
+    |> Keyword.put_new(:hostname, Keyword.get(config_env, :hostname))
+    |> Keyword.put_new(:port, Keyword.get(config_env, :port))
     |> Keyword.put_new(:pool_size, 5)
     |> Keyword.put_new(:max_overflow, 2)
     |> Keyword.put_new(:timeout, 15_000)
